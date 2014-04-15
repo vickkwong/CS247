@@ -46,13 +46,16 @@
         <h4 class="modal-title">Send video emoji</h4>
       </div>
       <div class="modal-body">
-        <div id="second_counter"></div>
+        <h3>It's you!</h3>
         <div id="webcam_stream"></div>
+        <h3>Recorded preview</h3>
+        <video autoplay loop width="120" id="preview_video">
+          <source id="recorded_stream" type="video/webm"></source>
+        </video>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-success" id="startVideo">Start recording</button>
-        <button type="button" class="btn btn-default" id="cancelVideo" data-dismiss="modal">Do not send video</button>
-        <button type="button" class="btn btn-primary" id="submitVideo">Send video</button>
+        <button type="button" class="btn btn-primary" id="submitVideo">Send message</button>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->

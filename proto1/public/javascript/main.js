@@ -7,6 +7,7 @@ var options = ["lol", ":)", ":(", ":D", ":|"];
 
   var cur_video_blob = null;
   var fb_instance;
+  var mediaRecorder;
 
   $(document).ready(function () {
     connect_to_chat_firebase();
@@ -92,27 +93,24 @@ var options = ["lol", ":)", ":(", ":D", ":|"];
     });
 
     $("#startVideo").click(function() {
-      $('#startVideo').addClass('disabled');
       mediaRecorder.start(3000);
-      mediaRecorder.stop();
-      $('#startVideo').removeClass('disabled');
-    })
+      $("#submitVideo").addClass("disabled");
+    });
 
-    $("#cancelVideo").click(function() {
+    $("#submitVideo").click(function () {
       var date = new Date();
       var min = date.getMinutes()+"";
       if (min.length < 2) min = "0" + min;
       var time = date.getHours() + ":" + min;
+      $('#videoModal').modal('toggle');
       fb_instance_stream.push({
         m: username + ": " + $("#submission input").val(),
+        v: cur_video_blob,
         c: my_color,
         t: time
       });
+      $('#recorded_stream').attr('src', '');
       $("#submission input").val("");
-    });
-
-    $("#submitVideo").click(function () {
-
     });
   }
 
@@ -194,7 +192,7 @@ var options = ["lol", ":)", ":(", ":D", ":|"];
 
       // now record stream in 3 seconds interval
       var video_container = document.getElementById('video_container');
-      var mediaRecorder = new MediaStreamRecorder(stream);
+      mediaRecorder = new MediaStreamRecorder(stream);
       var index = 1;
 
       mediaRecorder.mimeType = 'video/webm';
@@ -210,18 +208,12 @@ var options = ["lol", ":)", ":(", ":D", ":|"];
         // convert data into base 64 blocks
         blob_to_base64(blob, function (b64_data) {
           cur_video_blob = b64_data;
-          var date = new Date();
-          var min = date.getMinutes()+"";
-          if (min.length < 2) min = "0" + min;
-          var time = date.getHours() + ":" + min;
-          $('#videoModal').modal('toggle');
-          fb_instance_stream.push({
-            m: username + ": " + $("#submission input").val(),
-            v: cur_video_blob,
-            c: my_color,
-            t: time
-          });
-          $("#submission input").val("");
+          $("#submitVideo").removeClass("disabled");
+
+          $('#recorded_stream').attr('src', URL.createObjectURL(blob));
+          var preview = document.getElementById('preview_video');
+          preview.load();
+          preview.play();
         });
       // setInterval(function () {
       //   mediaRecorder.stop();
