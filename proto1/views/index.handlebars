@@ -13,7 +13,14 @@
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <form class="navbar-form navbar-right" role="share">
+        <div class="form-group">
+          <label for="chat_link">Shareable URL: </label>
+          <input type="text" class="form-control" placeholder="Search" id="chat_link">
+        </div>
+      </form>
       <ul class="nav navbar-nav navbar-right">
+        <li id="chat_link"></li>
         <li><a href="#">Settings</a></li>
       </ul>
     </div><!-- /.navbar-collapse -->
@@ -28,10 +35,29 @@
 		</div>
   </div>
   <div class="col-md-4" id="sidebar">
-  	<div id="second_counter"></div>
-		<div id="webcam_stream"></div>
-		<div id="chat_link"></div>
-		<div id="user_history"></div>
+    <p class="lead center-block" id="greeting_user"></p>
+    <h3>User history</h3>
+		<div id="user_history">
+      <p><strong>Chatroom history</strong></p>
+    </div>
   </div>
 </div>
+<div class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="videoModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Send video emoji</h4>
+      </div>
+      <div class="modal-body">
+        <div id="second_counter"></div>
+        <div id="webcam_stream"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 <div id="video_container"></div>

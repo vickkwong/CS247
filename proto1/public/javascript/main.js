@@ -21,8 +21,7 @@
       fb_chat_room_id = Math.random().toString(36).substring(7);
     }
     display_invite_msg({
-      m: "Share this URL with your friend to join this chat: " + document.location.origin + "/#" + fb_chat_room_id,
-      c: "red"
+      u: document.location.origin + "/#" + fb_chat_room_id
     })
 
     // set up variables to access firebase data structure
@@ -34,7 +33,7 @@
     // listen to events
     fb_instance_users.on("child_added", function (snapshot) {
       display_user({
-        m: snapshot.val().name + " joined the room",
+        m: "<" + snapshot.val().d + "> " + snapshot.val().name + " joined the room",
         c: snapshot.val().c
       });
     });
@@ -50,29 +49,37 @@
     });
 
     // block until username is answered
-    var username = window.prompt("おはようございます! 名前は..?");
+    var username = window.prompt("Please enter your desired display name!");
     if (!username) {
       username = "anonymous" + Math.floor(Math.random() * 1111);
     }
+    var date = new Date();
+    var time = date.getHours() + ":" + date.getMinutes();
     fb_instance_users.push({
       name: username,
-      c: my_color
+      c: my_color,
+      d: time
     });
     $("#waiting").remove();
+    $("#greeting_user").html("Hello, " + username + "!");
 
     // bind submission box
     $("#submission input").keydown(function (event) {
       if (event.which == 13) {
+        var date = new Date();
+        var time = date.getHours() + ":" + date.getMinutes();
         if (has_emotions($(this).val())) {
           fb_instance_stream.push({
             m: username + ": " + $(this).val(),
             v: cur_video_blob,
-            c: my_color
+            c: my_color,
+            t: time
           });
         } else {
           fb_instance_stream.push({
             m: username + ": " + $(this).val(),
-            c: my_color
+            c: my_color,
+            t: time
           });
         }
         $(this).val("");
@@ -83,7 +90,7 @@
   // creates a message node and appends it to the conversation
 
   function display_msg(data) {
-    $("#conversation").append("<div class='msg' style='color:" + data.c + "'>" + data.m + "</div>");
+    $("#conversation").append("<div class='msg' style='color:" + data.c + "'>" + "&lt;" + data.t + "&gt; " + data.m + "</div>");
     if (data.v) {
       // for video element
       var video = document.createElement("video");
@@ -112,7 +119,7 @@
   }
 
   function display_invite_msg(msg) {
-    $("#chat_link").html(msg.m);
+    $("#chat_link").val(msg.u);
   }
 
   function scroll_to_bottom(wait_time) {
