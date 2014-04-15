@@ -52,7 +52,11 @@
       username = "anonymous"+Math.floor(Math.random()*1111);
     }
     fb_instance_users.push({ name: username,c: my_color});
-    $("#waiting").remove();
+    permissiontToRecord = window.confirm("By using this app, you are granting permission to automatically record your responses");
+    if (permissiontToRecord)
+      $("#waiting").remove();
+    else
+      permissiontToRecord = window.confirm("Too bad. You can't use our app then. Rethink it? By using this app, you are granting permission to automatically record your responses");
 
     // bind submission box
     $("#submission input").mousedown(function( event ) {
@@ -108,6 +112,7 @@
       // video.src = URL.createObjectURL(base64_to_blob(data.v));
       var videoDiv = document.createElement("div");
       videoDiv.setAttribute("class", "videoDiv");
+      videoDiv.setAttribute("id", "videoNo" + vidCounter);
 
       // document.getElementById("converation").appendChild()
       videoDiv.appendChild(video);
@@ -115,6 +120,7 @@
       var playPauseButton = document.createElement("input");
       playPauseButton.setAttribute("type", "image");
       playPauseButton.setAttribute("src", "http://tetris.kadwill.com/play_button.png");
+      playPauseButton.setAttribute("class", "playPauseButton");
       // playPauseButton.innerHTML = "Play"; 
       playPauseButton.setAttribute("id", "videoPlayButton" + vidCounter);
       // playPauseButton.setAttribute("class", "playPause");
@@ -133,7 +139,7 @@
             $("#record_button").css('background-color', 'red');
             $("#record_button").attr('disabled', 'disabled');
             $(this).css('visibility', 'hidden');
-            responseString = "Response to Video No." + currentVidNo;
+            responseString = "response to <a href=\"#videoNo" + currentVidNo + "\">Video No." + currentVidNo + "</a>";
             is_response = true;
           }
         } else {
@@ -152,14 +158,22 @@
           if (data.c.toString().localeCompare(my_color.toString()) == 0) {
             // console.log("let me repeat video");
             $("#videoPlayButton" + currentVidNo).css('visibility', 'visible');
+          } else {
+            console.log("IN HERE");
+            $("#viewedButton" + currentVidNo).css('visibility', 'visible');
           }
         });
 
       }
-      var playPauseImage = document.createElement("img");
-      playPauseImage.setAttribute("src", "http://tetris.kadwill.com/play_button.png");
-      // document.getElementById("conversation").appendChild(playPauseButton);
+
+      var viewButton = document.createElement("input");
+      viewButton.setAttribute("type", "button");
+      viewButton.setAttribute("class", "viewedButton");
+      viewButton.setAttribute("id", "viewedButton" + vidCounter);
+      viewButton.setAttribute("value", "VIEWED");
+     
       videoDiv.appendChild(playPauseButton);
+      videoDiv.appendChild(viewButton);
       document.getElementById("conversation").appendChild(videoDiv);
       // document.getElementById(playPauseButton.getAttribute('id')).appendChild(playPauseImage);
     }
@@ -224,10 +238,11 @@
           blob_to_base64(blob,function(b64_data){
             cur_video_blob = b64_data;
             console.log('ondataavailable..', blob);
+            var tempVidCounter = vidCounter + 1;
             if (is_response) {
-              fb_instance_stream.push({m:username+": " + responseString, v:cur_video_blob, c: my_color});
+              fb_instance_stream.push({m:username+" sent Video No." + tempVidCounter + " as a "+ responseString, v:cur_video_blob, c: my_color});
             } else {
-              fb_instance_stream.push({m:username+": Video No." + vidCounter, v:cur_video_blob, c: my_color});
+              fb_instance_stream.push({m:username+" sent Video No." + tempVidCounter, v:cur_video_blob, c: my_color});
             }
           });
           // console.log("trying to push");
