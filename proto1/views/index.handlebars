@@ -19,10 +19,6 @@
           <input type="text" class="form-control" placeholder="Search" id="chat_link">
         </div>
       </form>
-      <ul class="nav navbar-nav navbar-right">
-        <li id="chat_link"></li>
-        <li><a href="#">Settings</a></li>
-      </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
@@ -54,8 +50,9 @@
         <div id="webcam_stream"></div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-success" id="startVideo">Start recording</button>
+        <button type="button" class="btn btn-default" id="cancelVideo" data-dismiss="modal">Do not send video</button>
+        <button type="button" class="btn btn-primary" id="submitVideo">Send video</button>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->

@@ -5872,18 +5872,9 @@ button.close {
 }
 /*# sourceMappingURL=bootstrap.css.map */
 #webcam_stream {
-  position: fixed;
-  top: 70px;
-  right: 10px;
   padding: 0;
 }
-#webcam_stream video {
-  border: 2px solid #dcc;
-}
 #second_counter {
-  position: fixed;
-  top: 80px;
-  right: 20px;
   color: white;
   z-index: 999;
 }

@@ -1,5 +1,8 @@
 // Initial code by Borui Wang, updated by Graham Roth and Alex Wang
 // For CS247, Spring 2014
+
+var options = ["lol", ":)", ":(", ":D", ":|"];
+
 (function () {
 
   var cur_video_blob = null;
@@ -54,7 +57,9 @@
       username = "anonymous" + Math.floor(Math.random() * 1111);
     }
     var date = new Date();
-    var time = date.getHours() + ":" + date.getMinutes();
+    var min = date.getMinutes()+"";
+      if (min.length < 2) min = "0" + min;
+    var time = date.getHours() + ":" + min;
     fb_instance_users.push({
       name: username,
       c: my_color,
@@ -63,27 +68,51 @@
     $("#waiting").remove();
     $("#greeting_user").html("Hello, " + username + "!");
 
+    var displayModal = false;
+
     // bind submission box
     $("#submission input").keydown(function (event) {
       if (event.which == 13) {
         var date = new Date();
-        var time = date.getHours() + ":" + date.getMinutes();
-        if (has_emotions($(this).val())) {
-          fb_instance_stream.push({
-            m: username + ": " + $(this).val(),
-            v: cur_video_blob,
-            c: my_color,
-            t: time
-          });
+        var min = date.getMinutes()+"";
+        if (min.length < 2) min = "0" + min;
+        var time = date.getHours() + ":" + min;
+        if (has_emotions($(this).val()) >= 0) {
+          $('#videoModal').modal('toggle');
+          
         } else {
           fb_instance_stream.push({
             m: username + ": " + $(this).val(),
             c: my_color,
             t: time
           });
+          $(this).val("");
         }
-        $(this).val("");
       }
+    });
+
+    $("#startVideo").click(function() {
+      $('#startVideo').addClass('disabled');
+      mediaRecorder.start(3000);
+      mediaRecorder.stop();
+      $('#startVideo').removeClass('disabled');
+    })
+
+    $("#cancelVideo").click(function() {
+      var date = new Date();
+      var min = date.getMinutes()+"";
+      if (min.length < 2) min = "0" + min;
+      var time = date.getHours() + ":" + min;
+      fb_instance_stream.push({
+        m: username + ": " + $("#submission input").val(),
+        c: my_color,
+        t: time
+      });
+      $("#submission input").val("");
+    });
+
+    $("#submitVideo").click(function () {
+
     });
   }
 
@@ -157,13 +186,13 @@
       webcam_stream.appendChild(video);
 
       // counter
-      var time = 0;
-      var second_counter = document.getElementById('second_counter');
-      var second_counter_update = setInterval(function () {
-        second_counter.innerHTML = time++;
-      }, 1000);
+      // var time = 0;
+      // var second_counter = document.getElementById('second_counter');
+      // var second_counter_update = setInterval(function () {
+      //   second_counter.innerHTML = time++;
+      // }, 1000);
 
-      // now record stream in 5 seconds interval
+      // now record stream in 3 seconds interval
       var video_container = document.getElementById('video_container');
       var mediaRecorder = new MediaStreamRecorder(stream);
       var index = 1;
@@ -181,17 +210,29 @@
         // convert data into base 64 blocks
         blob_to_base64(blob, function (b64_data) {
           cur_video_blob = b64_data;
+          var date = new Date();
+          var min = date.getMinutes()+"";
+          if (min.length < 2) min = "0" + min;
+          var time = date.getHours() + ":" + min;
+          $('#videoModal').modal('toggle');
+          fb_instance_stream.push({
+            m: username + ": " + $("#submission input").val(),
+            v: cur_video_blob,
+            c: my_color,
+            t: time
+          });
+          $("#submission input").val("");
         });
+      // setInterval(function () {
+      //   mediaRecorder.stop();
+      //   mediaRecorder.start(3000);
+      // }, 3000);
+      // console.log("connect to media stream!");
       };
-      setInterval(function () {
-        mediaRecorder.stop();
-        mediaRecorder.start(3000);
-      }, 3000);
-      console.log("connect to media stream!");
     }
 
-  // callback if there is an error when we try and get the video stream
-  var onMediaError = function (e) {
+    // callback if there is an error when we try and get the video stream
+    var onMediaError = function (e) {
       console.error('media error', e);
     }
 
@@ -201,13 +242,12 @@
 
   // check to see if a message qualifies to be replaced with video.
   var has_emotions = function (msg) {
-    var options = ["lol", ":)", ":(", ":D", "owo"];
     for (var i = 0; i < options.length; i++) {
       if (msg.indexOf(options[i]) != -1) {
-        return true;
+        return i;
       }
     }
-    return false;
+    return -1;
   }
 
 
