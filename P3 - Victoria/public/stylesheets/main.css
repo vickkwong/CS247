@@ -1,0 +1,75 @@
+body {
+  margin: 10px;
+  font: 15px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+a {
+  color: #00B7FF;
+}
+#webcam_stream {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 0;
+}
+#webcam_stream video {
+  border: 2px solid #dcc;
+}
+#second_counter {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  color: white;
+  z-index: 999;
+}
+#conversation {
+  padding: 10px 10px 80px;
+  overflow-y: scroll;
+  height: 100%;
+}
+#submission {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  right: 0;
+  /*border-top: 2px solid #dcc;*/
+  background: #fff;
+  padding: 10px;
+}
+#submission input {
+  border: none;
+  font-size: 15px;
+  padding: 15px;
+  outline: none;
+  box-sizing: border-box;
+  /*width: 100%;*/
+}
+#waiting {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  background: #292929;
+  color: white;
+  text-align: center;
+  padding: 50px 0;
+}
+#record_button {
+  width: 50px;
+  height: 50px;
+  border-radius: 100%;
+  background-color: #32cd32;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+.videoDiv {
+  position: relative;
+}
+.videoDiv input {
+  position: absolute;
+  width: 250px;
+  margin-left: -300px;
+  padding-top: 10px;
+  opacity: 0.5;
+}
